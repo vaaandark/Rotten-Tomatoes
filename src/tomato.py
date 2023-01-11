@@ -11,6 +11,12 @@ from classifier import Classifier
 from dataset import Dataset
 
 def train(model, data, learning_rate, epochs):
+    # 将原来训练数据的 90% 用于训练，10% 用于验证
+    train_data, val_data = train_test_split(data, test_size = 0.1)
+    print(f"Train Data Size: {len(train_data)} | Test Data Size: {len(val_data)}")
+
+    train, val = Dataset(train_data), Dataset(val_data)
+
     use_cuda = torch.cuda.is_available()
     device = torch.device("cuda" if use_cuda else "cpu")
 
@@ -25,19 +31,13 @@ def train(model, data, learning_rate, epochs):
     mean = 0
 
     for epoch_num in range(epochs):
-        # 将原来训练数据的 90% 用于训练，10% 用于验证
-        train_data, val_data = train_test_split(data, test_size = 0.1)
-        print("train data size: {}, test data size: {}".format(len(train_data), len(val_data)))
-
-        train, val = Dataset(train_data), Dataset(val_data)
-
         train_dataloader = torch.utils.data.DataLoader(train, batch_size=2, shuffle=True)
         val_dataloader = torch.utils.data.DataLoader(val, batch_size=2)
 
-        # 训练
         total_acc_train = 0
         total_loss_train = 0
 
+        # 训练
         for train_input, train_label in tqdm(train_dataloader):
             train_label = train_label.to(device)
             mask = train_input['attention_mask'].to(device)
@@ -55,10 +55,10 @@ def train(model, data, learning_rate, epochs):
             batch_loss.backward()
             optimizer.step()
         
-        # 测试
         total_acc_val = 0
         total_loss_val = 0
 
+        # 测试
         with torch.no_grad():
             for val_input, val_label in val_dataloader:
                 val_label = val_label.to(device)
@@ -73,7 +73,6 @@ def train(model, data, learning_rate, epochs):
                 acc = (output.argmax(dim=1) == val_label).sum().item()
                 total_acc_val += acc
         
-        # 汇报
         acc_val = total_acc_val / len(val_data)
         print(
             f'Epochs: {epoch_num + 1} | Train Loss: {total_loss_train / len(train_data): .3f} '\
@@ -83,7 +82,7 @@ def train(model, data, learning_rate, epochs):
         mean += acc_val
     
     mean /= 3
-    print('\nAverage accuracy of 3 times: {mean: .3f}')
+    print(f'\nAverage accuracy of 3 times: {mean: .3f}')
                   
 def main():
     EPOCHS = 3
