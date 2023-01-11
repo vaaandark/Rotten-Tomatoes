@@ -1,15 +1,16 @@
-#!/usr/bin/python3
-# usage python3 test.py [{THE_PHRASE_YOU_LIKE}]
-
-from classifier import BertClassifier
+#!env python3
+# 根据之前保存的模型判断你的评论对应的评分
+# 用法：
+#   python3 test.py [{你的评论（英文）}]
+from classifier import Classifier
 import torch
 import sys
 from transformers import BertTokenizer
 
 tokenizer = BertTokenizer.from_pretrained('prajjwal1/bert-tiny')
 
-model = BertClassifier()
-model.load_state_dict(torch.load("bert-tiny-movie-review.model"))
+model = Classifier()
+model.load_state_dict(torch.load("bert.model"))
 
 use_cuda = torch.cuda.is_available()
 device = torch.device("cuda" if use_cuda else "cpu")

@@ -10,15 +10,7 @@ from torch import nn
 from classifier import Classifier
 from dataset import Dataset
 
-df = pd.read_table('../data/train.tsv.zip')
-df.head()
-
 def train(model, data, learning_rate, epochs):
-    train_data, val_data = train_test_split(data, test_size = 0.1)
-    print("train data size: {}, test data size: {}\n".format(len(train_data), len(val_data)))
-
-    train, val = Dataset(train_data), Dataset(val_data)
-
     use_cuda = torch.cuda.is_available()
     device = torch.device("cuda" if use_cuda else "cpu")
 
@@ -29,11 +21,20 @@ def train(model, data, learning_rate, epochs):
         model = model.cuda()
         criterion = criterion.cuda()
 
+    # 重复三次“训练集/验证集划分、训练、测试”
     mean = 0
+
     for epoch_num in range(epochs):
+        # 将原来训练数据的 90% 用于训练，10% 用于验证
+        train_data, val_data = train_test_split(data, test_size = 0.1)
+        print("train data size: {}, test data size: {}".format(len(train_data), len(val_data)))
+
+        train, val = Dataset(train_data), Dataset(val_data)
+
         train_dataloader = torch.utils.data.DataLoader(train, batch_size=2, shuffle=True)
         val_dataloader = torch.utils.data.DataLoader(val, batch_size=2)
 
+        # 训练
         total_acc_train = 0
         total_loss_train = 0
 
@@ -54,6 +55,7 @@ def train(model, data, learning_rate, epochs):
             batch_loss.backward()
             optimizer.step()
         
+        # 测试
         total_acc_val = 0
         total_loss_val = 0
 
@@ -71,6 +73,7 @@ def train(model, data, learning_rate, epochs):
                 acc = (output.argmax(dim=1) == val_label).sum().item()
                 total_acc_val += acc
         
+        # 汇报
         acc_val = total_acc_val / len(val_data)
         print(
             f'Epochs: {epoch_num + 1} | Train Loss: {total_loss_train / len(train_data): .3f} '\
@@ -86,9 +89,12 @@ def main():
     EPOCHS = 3
     model = Classifier()
     LR = 1e-5
+
+    df = pd.read_table('../data/train.tsv.zip')
+    df.head()
     train(model, df, LR, EPOCHS)
 
-    # save the model we have trained
+    # 保存训练模型
     torch.save(model.state_dict(), "bert.model")
 
 if __name__ == '__main__':
