@@ -77,8 +77,8 @@ def train(model, data, learning_rate, epochs):
         print(
             f'Epochs: {epoch_num + 1} | Train Loss: {total_loss_train / len(train_data): .3f} '\
             f'| Train Accuracy: {total_acc_train / len(train_data): .3f} '\
-            f'| Val Loss: {total_loss_val / len(val_data): .3f} '\
-            f'| Val Accuracy: {acc_val: .3f}')
+            f'| Test Loss: {total_loss_val / len(val_data): .3f} '\
+            f'| Test Accuracy: {acc_val: .3f}')
         mean += acc_val
     
     mean /= 3
