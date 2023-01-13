@@ -11,10 +11,8 @@ svg2png() {
   convert -density 1200 "$filename".svg "$filename".png
 }
 
-python bar.py 训练损失   0.490 0.420 0.391
-python bar.py 训练准确率 0.605 0.656 0.683
-python bar.py 测试损失   0.439 0.415 0.405
-python bar.py 测试准确率 0.638 0.659 0.666
+python figure.py Loss Loss loss.data
+python figure.py Accuracy Accuracy acc.data
 
 for i in ./*.svg; do
   svg2png "$i"
