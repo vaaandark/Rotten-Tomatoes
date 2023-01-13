@@ -27,9 +27,6 @@ def train(model, data, learning_rate, epochs):
         model = model.cuda()
         criterion = criterion.cuda()
 
-    # 重复三次“训练集/验证集划分、训练、测试”
-    mean = 0
-
     for epoch_num in range(epochs):
         train_dataloader = torch.utils.data.DataLoader(train, batch_size=2, shuffle=True)
         val_dataloader = torch.utils.data.DataLoader(val, batch_size=2)
@@ -73,19 +70,14 @@ def train(model, data, learning_rate, epochs):
                 acc = (output.argmax(dim=1) == val_label).sum().item()
                 total_acc_val += acc
         
-        acc_val = total_acc_val / len(val_data)
         fmt = f'Epochs: {epoch_num + 1} | Training Loss: {total_loss_train / len(train_data): .3f} '\
             f'| Training Accuracy: {total_acc_train / len(train_data): .3f} '\
             f'| Validation Loss: {total_loss_val / len(val_data): .3f} '\
-            f'| Validation Accuracy: {acc_val: .3f}'
+            f'| Validation Accuracy: {total_acc_val / len(val_data): .3f}'
         print(fmt)
         with open('loss_and_acc.log', 'a') as f:
           f.write(fmt)
-        mean += acc_val
     
-    mean /= 3
-    print(f'\nAverage accuracy of 3 times: {mean: .3f}')
-                  
 def main():
     EPOCHS = 3
     model = Classifier()
