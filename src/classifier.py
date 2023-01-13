@@ -17,7 +17,6 @@ class Classifier(nn.Module):
         self.dropout = nn.Dropout(dropout)
 
         # 线性变换
-        # 最后分成五个等级，与烂番茄评分对应
         self.linear = nn.Linear(128, 5)
 
         # Rectified Linear Units - 修正线性单元
@@ -26,9 +25,8 @@ class Classifier(nn.Module):
 
     # 前向传播
     def forward(self, input_id, mask):
-        _, pooled_output = self.bert(input_ids= input_id, attention_mask=mask,return_dict=False)
+        _, pooled_output = self.bert(input_ids=input_id, attention_mask=mask, return_dict=False)
         dropout_output = self.dropout(pooled_output)
         linear_output = self.linear(dropout_output)
-        # 返回最后一层
         final_layer = self.relu(linear_output)
         return final_layer 

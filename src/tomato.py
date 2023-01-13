@@ -76,7 +76,7 @@ def train(model, data, learning_rate, epochs):
             f'| Validation Accuracy: {total_acc_val / len(val_data): .3f}'
         print(fmt)
         with open('loss_and_acc.log', 'a') as f:
-          f.write(fmt)
+          f.write(fmt + '\n')
     
 def main():
     EPOCHS = 3
