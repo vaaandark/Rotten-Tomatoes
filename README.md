@@ -25,9 +25,9 @@ $ python test.py {YOUR_PHRASE}
 ### 准确度
 
 ```plain
-Epochs: 1 | Train Loss:  0.490 | Train Accuracy:  0.605 | Test Loss:  0.439 | Test Accuracy:  0.638
-Epochs: 2 | Train Loss:  0.420 | Train Accuracy:  0.656 | Test Loss:  0.415 | Test Accuracy:  0.659
-Epochs: 3 | Train Loss:  0.391 | Train Accuracy:  0.683 | Test Loss:  0.405 | Test Accuracy:  0.666
+Epochs: 1 | Training Loss:  0.490 | Training Accuracy:  0.605 | Validation Loss:  0.439 | Validation Accuracy:  0.638
+Epochs: 2 | Training Loss:  0.420 | Training Accuracy:  0.656 | Validation Loss:  0.415 | Validation Accuracy:  0.659
+Epochs: 3 | Training Loss:  0.391 | Training Accuracy:  0.683 | Validation Loss:  0.405 | Validation Accuracy:  0.666
 
 Average accuracy of 3 times:  0.654
 ```

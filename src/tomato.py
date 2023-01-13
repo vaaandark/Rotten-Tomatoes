@@ -75,10 +75,10 @@ def train(model, data, learning_rate, epochs):
         
         acc_val = total_acc_val / len(val_data)
         print(
-            f'Epochs: {epoch_num + 1} | Train Loss: {total_loss_train / len(train_data): .3f} '\
-            f'| Train Accuracy: {total_acc_train / len(train_data): .3f} '\
-            f'| Test Loss: {total_loss_val / len(val_data): .3f} '\
-            f'| Test Accuracy: {acc_val: .3f}')
+            f'Epochs: {epoch_num + 1} | Training Loss: {total_loss_train / len(train_data): .3f} '\
+            f'| Training Accuracy: {total_acc_train / len(train_data): .3f} '\
+            f'| Validation Loss: {total_loss_val / len(val_data): .3f} '\
+            f'| Validation Accuracy: {acc_val: .3f}')
         mean += acc_val
     
     mean /= 3
