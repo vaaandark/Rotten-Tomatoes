@@ -6,6 +6,7 @@ from torch.optim import Adam
 from tqdm import tqdm
 from sklearn.model_selection import train_test_split
 from torch import nn
+from torch.utils.data import DataLoader
 
 from classifier import Classifier
 from dataset import Dataset
@@ -17,19 +18,18 @@ def train(model, data, learning_rate, epochs):
 
     train, val = Dataset(train_data), Dataset(val_data)
 
-    use_cuda = torch.cuda.is_available()
-    device = torch.device("cuda" if use_cuda else "cpu")
-
     criterion = nn.CrossEntropyLoss()
     optimizer = Adam(model.parameters(), lr= learning_rate)
 
+    use_cuda = torch.cuda.is_available()
+    device = torch.device("cuda" if use_cuda else "cpu")
     if use_cuda:
         model = model.cuda()
         criterion = criterion.cuda()
 
-    for epoch_num in range(epochs):
-        train_dataloader = torch.utils.data.DataLoader(train, batch_size=2, shuffle=True)
-        val_dataloader = torch.utils.data.DataLoader(val, batch_size=2)
+    for i in range(epochs):
+        train_dataloader = DataLoader(train, batch_size=2, shuffle=True)
+        val_dataloader = DataLoader(val, batch_size=2)
 
         total_acc_train = 0
         total_loss_train = 0
@@ -70,7 +70,7 @@ def train(model, data, learning_rate, epochs):
                 acc = (output.argmax(dim=1) == val_label).sum().item()
                 total_acc_val += acc
         
-        fmt = f'Epochs: {epoch_num + 1} | Training Loss: {total_loss_train / len(train_data): .3f} '\
+        fmt = f'Epochs: {i + 1} | Training Loss: {total_loss_train / len(train_data): .3f} '\
             f'| Training Accuracy: {total_acc_train / len(train_data): .3f} '\
             f'| Validation Loss: {total_loss_val / len(val_data): .3f} '\
             f'| Validation Accuracy: {total_acc_val / len(val_data): .3f}'
