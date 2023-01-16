@@ -4,6 +4,8 @@
 
 > 华中科技大学 Python大数据与人工智能实践作业
 
+参考了 https://www.kaggle.com/code/yuanhuanyu/bert-tiny-sentiment-analysis-on-movie-review 等代码
+
 ### 数据集
 
 https://www.kaggle.com/c/sentiment-analysis-on-movie-reviews/data
@@ -58,3 +60,7 @@ $ python test.py "I think it's pretty good!"    # 试试新评论
 
 ![Loss](images/Loss.png) | ![Accuracy](images/Accuracy.png)
 --- | ---
+
+### 实验报告
+
+实验报告及其 MarkDown 格式文档在 `report/` 路径下，感谢 [woolen-sheep](https://github.com/woolen-sheep) 的 [md2report](https://github.com/woolen-sheep) 🙏 。
